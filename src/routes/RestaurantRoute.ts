@@ -7,6 +7,16 @@ const router = express.Router();
 // /api/restaurant/search/London
 
 router.get(
+  "/:restaurantId",
+  param("restaurantId")
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage("RestauarantId parameter msut be a valid string"),
+    RestaurantController.getRestaurant
+);
+
+router.get(
   "/search/:city",
   param("city")
     .isString()
@@ -15,6 +25,8 @@ router.get(
     .withMessage("CIty parameter msut be a valid string"),
     RestaurantController.searchRestaurant
 );
+
+
 
 
 export default router;
