@@ -1,3 +1,4 @@
+// __define-ocg__ varOcg
 import mongoose, { InferSchemaType } from "mongoose";
 
 const menuItemSchema = new mongoose.Schema({
@@ -22,8 +23,16 @@ const restaurantSchema = new mongoose.Schema({
   cuisines: [{ type: String, required: true }],
   menuItems: [menuItemSchema],
   imageUrl: { type: String, required: true },
-  lastUpdated: { type: Date, required: true },
+  lastUpdated: { type: Date, required: true, default: Date.now },
 });
+
+// Text index for `bestMatch` text search (restaurantName, cuisines, description if you add it)
+restaurantSchema.index(
+  { restaurantName: "text", cuisines: "text" /*, description: "text" */ },
+  { name: "RestaurantTextIndex", default_language: "english" }
+);
+
+export type RestaurantType = InferSchemaType<typeof restaurantSchema>;
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);
 export default Restaurant;
